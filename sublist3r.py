@@ -95,6 +95,7 @@ def parse_args():
     parser.add_argument('-b', '--bruteforce', help='Enable the subbrute bruteforce module', nargs='?', default=False)
     parser.add_argument('-p', '--ports', help='Scan the found subdomains against specified tcp ports')
     parser.add_argument('-v', '--verbose', help='Enable Verbosity and display results in realtime', nargs='?', default=False)
+    parser.add_argument('-s', '--silent', help='Enable silent mode and display results only', action='store_true')
     parser.add_argument('-t', '--threads', help='Number of threads to use for subbrute bruteforce', type=int, default=30)
     parser.add_argument('-e', '--engines', help='Specify a comma-separated list of search engines')
     parser.add_argument('-o', '--output', help='Save the results to text file')
@@ -877,8 +878,7 @@ def main(domain, threads, savefile, ports, silent, verbose, enable_bruteforce, e
     # Validate domain
     domain_check = re.compile("^(http|https)?[a-zA-Z0-9]+([\-\.]{1}[a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$")
     if not domain_check.match(domain):
-        if not silent:
-            print(R + "Error: Please enter a valid domain" + W)
+        print(R + "Error: Please enter a valid domain" + W)
         return []
 
     if not domain.startswith('http://') or not domain.startswith('https://'):
@@ -960,7 +960,7 @@ def main(domain, threads, savefile, ports, silent, verbose, enable_bruteforce, e
             pscan = portscan(subdomains, ports)
             pscan.run()
 
-        elif not silent:
+        else:
             for subdomain in subdomains:
                 print(G + subdomain + W)
     return subdomains
@@ -975,7 +975,9 @@ if __name__ == "__main__":
     enable_bruteforce = args.bruteforce
     verbose = args.verbose
     engines = args.engines
+    silent = args.silent
     if verbose or verbose is None:
         verbose = True
-    banner()
-    res = main(domain, threads, savefile, ports, silent=False, verbose=verbose, enable_bruteforce=enable_bruteforce, engines=engines)
+    elif not silent:
+        banner()
+    res = main(domain, threads, savefile, ports, silent=silent, verbose=verbose, enable_bruteforce=enable_bruteforce, engines=engines)
