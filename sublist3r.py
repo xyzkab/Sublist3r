@@ -95,7 +95,7 @@ def parse_args():
     parser.add_argument('-b', '--bruteforce', help='Enable the subbrute bruteforce module', nargs='?', default=False)
     parser.add_argument('-p', '--ports', help='Scan the found subdomains against specified tcp ports')
     parser.add_argument('-v', '--verbose', help='Enable Verbosity and display results in realtime', nargs='?', default=False)
-    parser.add_argument('-s', '--silent', help='Enable silent mode and display results only', action='store_true')
+    parser.add_argument('-s', '--silent', help='Enable silent mode and display results', action='store_true')
     parser.add_argument('-t', '--threads', help='Number of threads to use for subbrute bruteforce', type=int, default=30)
     parser.add_argument('-e', '--engines', help='Specify a comma-separated list of search engines')
     parser.add_argument('-o', '--output', help='Save the results to text file')
@@ -962,7 +962,7 @@ def main(domain, threads, savefile, ports, silent, verbose, enable_bruteforce, e
 
         else:
             for subdomain in subdomains:
-                print(G + subdomain + W)
+                print subdomain
     return subdomains
 
 
